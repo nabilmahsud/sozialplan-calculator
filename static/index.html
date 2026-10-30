@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sozialplan Calculator</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">§</div>
+      <div>
+        <h1>Sozialplan Calculator</h1>
+        <p class="sub"><span id="client">Loading…</span> · cut-off <span id="cutoffLabel"></span></p>
+      </div>
+    </div>
+    <div class="actions">
+      <label class="btn ghost" for="fileInput">Upload Excel</label>
+      <input id="fileInput" type="file" accept=".xlsx" hidden>
+      <button class="btn ghost" id="resetSample">Sample data</button>
+      <button class="btn primary" id="downloadAll">Download all PDFs</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="panel params">
+      <h2>Parameters</h2>
+
+      <div class="field">
+        <div class="field-head">
+          <label for="divisor">Divisor (factor)</label>
+          <output id="divisorOut"></output>
+        </div>
+        <input id="divisor" type="range" min="40" max="150" step="1" value="100">
+        <p class="hint">Severance = age × years of service × monthly gross ÷ divisor. Lower divisor, higher payments.</p>
+      </div>
+
+      <div class="field">
+        <label for="childBonus">Bonus per child (EUR)</label>
+        <input id="childBonus" type="number" min="0" step="500" value="2500">
+      </div>
+      <div class="field">
+        <label for="disabilityBonus">Severe disability bonus (EUR)</label>
+        <input id="disabilityBonus" type="number" min="0" step="500" value="5000">
+      </div>
+      <div class="field two">
+        <div>
+          <label for="minimum">Minimum (EUR)</label>
+          <input id="minimum" type="number" min="0" step="500" value="3000">
+        </div>
+        <div>
+          <label for="maximum">Maximum (EUR)</label>
+          <input id="maximum" type="number" min="0" step="5000" value="100000">
+        </div>
+      </div>
+      <div class="field">
+        <label for="cutoff">Cut-off date</label>
+        <input id="cutoff" type="date" value="2026-12-31">
+      </div>
+
+      <div class="baseline">
+        <button class="btn ghost full" id="setBaseline">Save as baseline scenario</button>
+        <p class="hint" id="baselineHint">Save the current settings, then change parameters to compare the cost.</p>
+      </div>
+      <p class="error" id="paramError" hidden></p>
+    </aside>
+
+    <section class="content">
+      <div class="kpis">
+        <div class="kpi"><span class="kpi-label">Employees</span><span class="kpi-value" id="kCount">–</span></div>
+        <div class="kpi accent"><span class="kpi-label">Total severance volume</span><span class="kpi-value" id="kTotal">–</span><span class="kpi-delta" id="kDelta"></span></div>
+        <div class="kpi"><span class="kpi-label">Average</span><span class="kpi-value" id="kAvg">–</span></div>
+        <div class="kpi"><span class="kpi-label">Median</span><span class="kpi-value" id="kMedian">–</span></div>
+        <div class="kpi"><span class="kpi-label">At max / min</span><span class="kpi-value" id="kLimits">–</span></div>
+      </div>
+
+      <div class="charts">
+        <div class="panel">
+          <h3>Volume by department</h3>
+          <div id="deptChart" class="chart"></div>
+        </div>
+        <div class="panel">
+          <h3>Distribution of payments</h3>
+          <div id="histChart" class="chart"></div>
+        </div>
+      </div>
+
+      <div class="panel table-panel">
+        <div class="table-head">
+          <h3>Employees</h3>
+          <input id="search" type="search" placeholder="Search name, ID or department">
+        </div>
+        <div class="table-wrap">
+          <table id="table">
+            <thead>
+              <tr>
+                <th data-key="name">Name</th>
+                <th data-key="department">Department</th>
+                <th data-key="age" class="num">Age</th>
+                <th data-key="years_of_service" class="num">Years</th>
+                <th data-key="monthly_gross" class="num">Monthly gross</th>
+                <th data-key="children" class="num">Children</th>
+                <th data-key="severance" class="num">Severance</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="drawer-backdrop" id="backdrop" hidden></div>
+  <aside class="drawer" id="drawer" aria-hidden="true">
+    <button class="close" id="closeDrawer" aria-label="Close">×</button>
+    <p class="eyebrow" id="dId"></p>
+    <h2 id="dName"></h2>
+    <p class="sub" id="dMeta"></p>
+    <div class="amount" id="dAmount"></div>
+    <ol class="steps" id="dSteps"></ol>
+    <div class="drawer-actions">
+      <button class="btn primary" id="dPdf">Download PDF</button>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast" hidden></div>
+  <script src="/static/app.js"></script>
+</body>
+</html>

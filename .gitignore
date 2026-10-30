@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.env
+# never commit real employee data; only the fictional sample is allowed
+data/*.xlsx
+!data/employees.xlsx
+!data/legacy_sozialplan_model.xlsx
+.DS_Store
